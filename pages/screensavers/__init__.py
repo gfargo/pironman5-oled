@@ -13,6 +13,7 @@ from .ocean_waves import OceanWaves
 from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
+from .bouncing_balls import BouncingBalls
 
 ALL_SCREENSAVERS = [
     DVDBounce,
@@ -29,4 +30,5 @@ ALL_SCREENSAVERS = [
     Lissajous,
     PerlinTerrain,
     Spirograph,
+    BouncingBalls,
 ]
