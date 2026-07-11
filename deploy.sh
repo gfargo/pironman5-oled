@@ -61,6 +61,16 @@ cp "$SCRIPT_DIR/pages/screensavers/"*.py "$ACTUAL_PAGES/screensavers/"
 # Step 3: Copy the pages __init__.py (registry)
 cp "$SCRIPT_DIR/pages/__init__.py" "$ACTUAL_PAGES/__init__.py"
 
+# Step 3b: Ensure PyYAML is available for oled-config.yaml support
+echo "[deploy] Ensuring PyYAML is installed..."
+"$PIRONMAN_ROOT/venv/bin/pip" install --quiet pyyaml || true
+
+# Step 3c: Seed oled-config.yaml from the example if one isn't already present
+if [ ! -f "$PIRONMAN_ROOT/oled-config.yaml" ]; then
+    echo "[deploy] Seeding default oled-config.yaml..."
+    cp "$SCRIPT_DIR/oled-config.example.yaml" "$PIRONMAN_ROOT/oled-config.yaml"
+fi
+
 # Step 4: Update config to use orchestrator (idempotent)
 CONFIG="$PIRONMAN_ROOT/config.json"
 if [ -f "$CONFIG" ]; then
