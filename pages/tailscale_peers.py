@@ -4,7 +4,7 @@ import time
 from pm_auto.libs.oled_page import OLEDPage
 from pm_auto.libs.utils import get_font
 
-from ._tailscale_util import parse_peers, parse_ping_latency, should_refetch
+from ._tailscale_util import parse_peers, parse_ping_latency, should_refetch, truncate_name
 
 font = get_font('UbuntuSans-Regular.ttf')
 
@@ -66,12 +66,13 @@ class PageTailscalePeers(OLEDPage):
         for peer in peers:
             if y > 60:
                 break
+            display_name = truncate_name(peer['name'])
             glyph = '*' if peer['online'] else 'x'
             if peer['online']:
                 lat = f"{peer['latency']:.0f}ms" if peer['latency'] is not None else '--'
-                oled.draw_text(f"{glyph} {peer['name']:<7} {lat}", 0, y, size=10, font_path=font)
+                oled.draw_text(f"{glyph} {display_name:<7} {lat}", 0, y, size=10, font_path=font)
             else:
-                oled.draw_text(f"{glyph} {peer['name']:<7} offline", 0, y, size=10, font_path=font)
+                oled.draw_text(f"{glyph} {display_name:<7} offline", 0, y, size=10, font_path=font)
             y += 12
 
         oled.display()

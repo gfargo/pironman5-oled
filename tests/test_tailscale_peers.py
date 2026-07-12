@@ -8,7 +8,7 @@ import json
 import sys
 
 sys.path.insert(0, sys.path[0].replace('/tests', '/pages'))
-from _tailscale_util import parse_peers, parse_ping_latency, should_refetch
+from _tailscale_util import parse_peers, parse_ping_latency, should_refetch, truncate_name
 
 
 SAMPLE_JSON = json.dumps({
@@ -54,13 +54,24 @@ def test_parse_peers_malformed_json_returns_empty():
     assert parse_peers(json.dumps([1, 2, 3])) == []
 
 
-def test_parse_peers_name_truncation():
+def test_parse_peers_keeps_full_name_untruncated():
+    # Full hostname must survive parsing so it can be passed to
+    # `tailscale ping <name>` — truncating here would break pinging any
+    # peer with a hostname longer than the display width.
     raw = json.dumps({
         "Peer": {"k": {"HostName": "a-very-long-hostname", "Online": True}}
     })
     peers = parse_peers(raw)
-    assert peers[0]['name'] == 'a-very-'
-    assert len(peers[0]['name']) == 7
+    assert peers[0]['name'] == 'a-very-long-hostname'
+
+
+def test_truncate_name_for_display():
+    assert truncate_name('a-very-long-hostname') == 'a-very-'
+    assert len(truncate_name('a-very-long-hostname')) == 7
+
+
+def test_truncate_name_shorter_than_limit_unchanged():
+    assert truncate_name('watch') == 'watch'
 
 
 def test_parse_peers_falls_back_to_dnsname():
