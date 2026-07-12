@@ -57,7 +57,9 @@ def _propagate(heat, cooling_min=COOLING_MIN, cooling_max=COOLING_MAX, heat_max=
     for y in range(rows - 1):
         below = heat[y + 1]
         for x in range(cols):
-            avg = (below[(x - 1) % cols] + below[x] + below[(x + 1) % cols]) / 3.0
+            left = below[x - 1] if x > 0 else below[x]
+            right = below[x + 1] if x < cols - 1 else below[x]
+            avg = (left + below[x] + right) / 3.0
             cooling = rng.uniform(cooling_min, cooling_max)
             new_heat[y][x] = max(0.0, min(heat_max, avg - cooling))
 

@@ -45,12 +45,13 @@ def test_propagate_averages_neighbors_below_with_no_cooling():
 
     new_heat = _propagate(heat, cooling_min=0.0, cooling_max=0.0, heat_max=HEAT_MAX)
 
-    # row 1 pulls from row 2 with wraparound neighbors
+    # row 1 pulls from row 2; edge columns clamp (repeat the edge cell) rather
+    # than wrap around the opposite side of the screen
     expected_row1 = [
-        (heat[2][3] + heat[2][0] + heat[2][1]) / 3.0,
+        (heat[2][0] + heat[2][0] + heat[2][1]) / 3.0,
         (heat[2][0] + heat[2][1] + heat[2][2]) / 3.0,
         (heat[2][1] + heat[2][2] + heat[2][3]) / 3.0,
-        (heat[2][2] + heat[2][3] + heat[2][0]) / 3.0,
+        (heat[2][2] + heat[2][3] + heat[2][3]) / 3.0,
     ]
     for actual, expected in zip(new_heat[1], expected_row1):
         assert abs(actual - expected) < 1e-9
@@ -69,6 +70,17 @@ def test_propagate_clamps_to_heat_max_and_zero():
     heat2 = [[HEAT_MAX * 2] * 3, [HEAT_MAX * 2] * 3]
     new_heat2 = _propagate(heat2, cooling_min=0.0, cooling_max=0.0, heat_max=HEAT_MAX)
     assert new_heat2[0] == [HEAT_MAX, HEAT_MAX, HEAT_MAX]
+
+
+def test_propagate_does_not_wrap_around_screen_edges():
+    """A hot spot at one edge must not bleed into the opposite edge."""
+    heat = [[0.0] * 5 for _ in range(2)]
+    heat[1] = [HEAT_MAX, 0.0, 0.0, 0.0, 0.0]  # only the left edge is hot
+
+    new_heat = _propagate(heat, cooling_min=0.0, cooling_max=0.0, heat_max=HEAT_MAX)
+
+    # The rightmost column has no wraparound neighbor to draw heat from.
+    assert new_heat[0][-1] == 0.0
 
 
 def test_propagate_is_deterministic_given_seeded_rng():
