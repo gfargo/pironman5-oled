@@ -14,6 +14,7 @@ from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
 from .raindrop_ripples import RaindropRipples
+from .fire_effect import FireEffect
 from .maze import Maze
 
 ALL_SCREENSAVERS = [
@@ -32,5 +33,6 @@ ALL_SCREENSAVERS = [
     PerlinTerrain,
     Spirograph,
     RaindropRipples,
+    FireEffect,
     Maze,
 ]
