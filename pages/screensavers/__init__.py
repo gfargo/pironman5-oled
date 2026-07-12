@@ -13,6 +13,7 @@ from .ocean_waves import OceanWaves
 from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
+from .maze import Maze
 from .morphing_clock import MorphingClock
 
 ALL_SCREENSAVERS = [
@@ -30,5 +31,6 @@ ALL_SCREENSAVERS = [
     Lissajous,
     PerlinTerrain,
     Spirograph,
+    Maze,
     MorphingClock,
 ]
