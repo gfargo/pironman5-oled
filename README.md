@@ -18,7 +18,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 ```
 
 Features:
-- **15 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, sprint progress, portfolio, weather, and more)
+- **16 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, sprint progress, portfolio, weather, and more)
 - **14 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
@@ -34,6 +34,7 @@ Features:
 | Docker Health | Container count + status summary |
 | Temperature | CPU + NVMe temps with trend |
 | Network | Tailscale peers + connectivity |
+| Tailscale Peers | Per-peer name, online status, ping latency |
 | NVMe Health | Wear level, temp, power hours |
 | Backup Status | Latest backup age + size + health |
 | Sprint Board | Current Plane cycle progress |
@@ -185,6 +186,7 @@ pironman5-oled/
     ├── docker_health.py   # Info: container count + status
     ├── temperature.py     # Info: CPU + NVMe temps
     ├── network_status.py  # Info: Tailscale peers
+    ├── tailscale_peers.py # Info: per-peer name + online status + latency
     ├── nvme_health.py     # Info: NVMe wear + temp
     ├── backup_status.py   # Info: latest backup health
     ├── sprint_board.py    # Info: Plane cycle progress (needs token)

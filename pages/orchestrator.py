@@ -19,6 +19,7 @@ from pm_auto.libs.oled_page import OLEDPage
 from .mix import PageMix
 from .docker_health import PageDockerHealth
 from .network_status import PageNetwork
+from .tailscale_peers import PageTailscalePeers
 from .nvme_health import PageNVMeHealth
 from .backup_status import PageBackupStatus
 from .cpu_memory import PageCpuMemory
@@ -56,6 +57,7 @@ class PageOrchestrator(OLEDPage):
             PageDockerHealth(),
             PageTemperature(),
             PageNetwork(),
+            PageTailscalePeers(),
             PageNVMeHealth(),
             PageBackupStatus(),
             PageSprintBoard(),
