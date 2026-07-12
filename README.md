@@ -19,7 +19,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 
 Features:
 - **15 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, sprint progress, portfolio, weather, and more)
-- **15 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, and more)
+- **16 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
 - **Service integrations** — reads from Plane, Ghostfolio, Actual Budget, OctoPrint, GitHub (via API tokens)
@@ -47,7 +47,7 @@ Features:
 
 ## Screensavers
 
-Matrix Rain · Game of Life · Starfield · Spirograph · Ocean Waves · Perlin Terrain · Particles · Pendulum Wave · Fractal Tree · Lissajous · DVD Bounce · Binary Clock · Sine Wave · Uptime Counter · Fire Effect
+Matrix Rain · Game of Life · Starfield · Spirograph · Ocean Waves · Perlin Terrain · Particles · Pendulum Wave · Fractal Tree · Lissajous · DVD Bounce · Binary Clock · Sine Wave · Uptime Counter · Raindrop Ripples · Fire Effect
 
 ## Installation
 
