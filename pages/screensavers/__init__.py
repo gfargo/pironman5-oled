@@ -14,6 +14,9 @@ from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
 from .bouncing_balls import BouncingBalls
+from .raindrop_ripples import RaindropRipples
+from .fire_effect import FireEffect
+from .maze import Maze
 
 ALL_SCREENSAVERS = [
     DVDBounce,
@@ -31,4 +34,7 @@ ALL_SCREENSAVERS = [
     PerlinTerrain,
     Spirograph,
     BouncingBalls,
+    RaindropRipples,
+    FireEffect,
+    Maze,
 ]
