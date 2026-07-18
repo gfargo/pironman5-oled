@@ -106,24 +106,24 @@ class Boids:
             # Compute steering deltas
             steer_x = steer_y = 0.0
 
-            # Separation — always applied when neighbours are too close
+            # Separation — averaged over neighbours, then weighted
             if n_sep > 0:
-                steer_x += sep_x * SEP_W
-                steer_y += sep_y * SEP_W
+                steer_x += (sep_x / n_sep) * SEP_W
+                steer_y += (sep_y / n_sep) * SEP_W
 
             # Alignment — steer toward average heading
             if n_ali > 0:
                 avg_vx = ali_vx / n_ali
                 avg_vy = ali_vy / n_ali
-                steer_x += (avg_vx - b['vx']) * ALI_W * dt
-                steer_y += (avg_vy - b['vy']) * ALI_W * dt
+                steer_x += (avg_vx - b['vx']) * ALI_W
+                steer_y += (avg_vy - b['vy']) * ALI_W
 
             # Cohesion — steer toward centre of mass
             if n_coh > 0:
-                steer_x += (coh_x / n_coh) * COH_W * dt
-                steer_y += (coh_y / n_coh) * COH_W * dt
+                steer_x += (coh_x / n_coh) * COH_W
+                steer_y += (coh_y / n_coh) * COH_W
 
-            # Apply steering
+            # Apply steering (dt applied once here for all rules)
             nvx = b['vx'] + steer_x * dt
             nvy = b['vy'] + steer_y * dt
 
