@@ -17,6 +17,7 @@ from .lorenz_attractor import LorenzAttractor
 from .raindrop_ripples import RaindropRipples
 from .fire_effect import FireEffect
 from .maze import Maze
+from .morphing_clock import MorphingClock
 
 ALL_SCREENSAVERS = [
     DVDBounce,
@@ -37,4 +38,5 @@ ALL_SCREENSAVERS = [
     RaindropRipples,
     FireEffect,
     Maze,
+    MorphingClock,
 ]
