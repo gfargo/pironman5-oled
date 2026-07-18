@@ -1,6 +1,7 @@
 """Tailscale Peers — name, online/offline, and ping latency for each peer."""
 import subprocess
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pm_auto.libs.oled_page import OLEDPage
 from pm_auto.libs.utils import get_font
 
@@ -19,6 +20,15 @@ class PageTailscalePeers(OLEDPage):
         self._cache = []
         self._last_fetch = 0.0
 
+    def _ping_peer(self, peer):
+        try:
+            ping = subprocess.run(
+                ['tailscale', 'ping', '-c', '1', '--timeout', f'{PING_TIMEOUT}s', peer['name']],
+                capture_output=True, text=True, timeout=PING_TIMEOUT + 2)
+            peer['latency'] = parse_ping_latency(ping.stdout)
+        except Exception:
+            peer['latency'] = None
+
     def _fetch_peers(self):
         try:
             result = subprocess.run(
@@ -29,20 +39,17 @@ class PageTailscalePeers(OLEDPage):
             return []
 
         online_peers = [p for p in peers if p['online']][:MAX_PINGS]
-        for peer in online_peers:
-            try:
-                ping = subprocess.run(
-                    ['tailscale', 'ping', '-c', '1', '--timeout', f'{PING_TIMEOUT}s', peer['name']],
-                    capture_output=True, text=True, timeout=PING_TIMEOUT + 2)
-                peer['latency'] = parse_ping_latency(ping.stdout)
-            except Exception:
-                peer['latency'] = None
+        if online_peers:
+            # Ping peers concurrently — pinging them one at a time could block
+            # rendering for up to len(online_peers) * (PING_TIMEOUT + 2) seconds.
+            with ThreadPoolExecutor(max_workers=len(online_peers)) as pool:
+                list(pool.map(self._ping_peer, online_peers))
 
         return peers
 
     def _get_peers(self):
         now = time.time()
-        if not self._cache or should_refetch(self._last_fetch, now, CACHE_SECONDS):
+        if should_refetch(self._last_fetch, now, CACHE_SECONDS):
             self._cache = self._fetch_peers()
             self._last_fetch = now
         return self._cache
