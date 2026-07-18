@@ -1,0 +1,36 @@
+# Pironman5 OLED orchestrator config.
+#
+# Copy this file to /opt/pironman5/oled-config.yaml and edit as needed.
+# If the file is missing, unreadable, or PyYAML isn't installed, the
+# orchestrator silently falls back to its built-in defaults (the list
+# below) — nothing crashes.
+#
+# Entries in `pages` that aren't recognized page names are logged as a
+# warning and skipped, they never crash the orchestrator.
+
+# Info pages to show, in display order. Omit a page to disable it.
+# Valid names: clock, cpu_memory, docker_health, temperature, network,
+# nvme_health, backup_status, sprint_board, portfolio_ticker, budget_burn,
+# plane_stats, weather, octoprint_status, github_activity, mix
+pages:
+  - clock
+  - cpu_memory
+  - docker_health
+  - temperature
+  - network
+  - nvme_health
+  - backup_status
+  - sprint_board
+  - portfolio_ticker
+  - budget_burn
+  - plane_stats
+  - weather
+  - octoprint_status
+  - github_activity
+  - mix
+
+# Timing, in seconds.
+timing:
+  info_duration: 12
+  screensaver_duration: 45
+  alert_duration: 5

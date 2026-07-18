@@ -13,6 +13,11 @@ from .ocean_waves import OceanWaves
 from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
+from .lorenz_attractor import LorenzAttractor
+from .raindrop_ripples import RaindropRipples
+from .fire_effect import FireEffect
+from .maze import Maze
+from .morphing_clock import MorphingClock
 from .snake_ai import SnakeAI
 
 ALL_SCREENSAVERS = [
@@ -30,5 +35,10 @@ ALL_SCREENSAVERS = [
     Lissajous,
     PerlinTerrain,
     Spirograph,
+    LorenzAttractor,
+    RaindropRipples,
+    FireEffect,
+    Maze,
+    MorphingClock,
     SnakeAI,
 ]
