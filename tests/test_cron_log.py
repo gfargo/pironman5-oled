@@ -89,3 +89,12 @@ def test_command_with_trailing_args_uses_script_basename():
     text = "Jul 20 09:00:01 pi5 CRON[1]: (pi) CMD (/usr/bin/python3 /opt/job.py --flag value)"
     entries = parse_cron_log(text)
     assert entries[0]['command'] == 'job'
+
+
+def test_command_with_output_redirection_uses_script_basename():
+    text = (
+        "Jul 20 09:00:01 pi5 CRON[1]: (pi) CMD "
+        "(/bin/bash /opt/backup.sh > /var/log/backup.log 2>&1)"
+    )
+    entries = parse_cron_log(text)
+    assert entries[0]['command'] == 'backup.sh'

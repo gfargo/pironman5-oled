@@ -21,9 +21,21 @@ _CRON_LINE = re.compile(
 )
 
 
+_SHELL_METACHARS = {'>', '>>', '2>', '2>&1', '2>>', '|', '&&', ';'}
+
+
 def _job_name(command):
-    """Reduce a CMD line's shell command to a short job name (script basename, no extension)."""
+    """Reduce a CMD line's shell command to a short job name (script basename, no extension).
+
+    Redirection/pipe targets (e.g. `backup.sh > /var/log/backup.log 2>&1`) are not the
+    job — truncate at the first shell metacharacter so the scan below never picks up a
+    log path instead of the script itself.
+    """
     parts = command.split()
+    for i, part in enumerate(parts):
+        if part in _SHELL_METACHARS or part.startswith('>') or part.startswith('2>'):
+            parts = parts[:i]
+            break
     for part in reversed(parts):
         if part.endswith('.py') or '/' in part:
             return part.rsplit('/', 1)[-1].removesuffix('.py')
