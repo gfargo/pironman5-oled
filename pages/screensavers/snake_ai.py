@@ -75,6 +75,7 @@ class SnakeAI:
     """Autonomous snake that navigates a 32×16 grid with BFS pathfinding."""
 
     def __init__(self):
+        self.rounds = 0
         self.reset()
 
     def reset(self):
@@ -83,7 +84,8 @@ class SnakeAI:
         self.body = deque([(cx, cy), (cx - 1, cy), (cx - 2, cy)])
         self.food = self._place_food()
         self.score = 0
-        self.rounds = 0
+        # rounds is NOT reset here — it accumulates across all rounds in this
+        # screensaver activation.  It is initialised once in __init__.
         self.frame = 0            # used for blink animation on food
 
     def _place_food(self):
@@ -111,7 +113,11 @@ class SnakeAI:
             self.reset()
             return False
 
-        # Self-collision check (against full body, tail already removed above)
+        # Self-collision guard — intentionally defensive.
+        # _bfs_path and _greedy_step both skip body_set cells, so next_pos
+        # cannot be in body_set under normal operation.  This guard exists so
+        # that any future refactor that inadvertently allows a collision is
+        # caught here rather than silently corrupting the snake's body.
         if next_pos in body_set:
             self.rounds += 1
             self.reset()
@@ -145,7 +151,7 @@ class SnakeAI:
                 # Head: filled 4×4
                 oled.draw.rectangle([px, py, px + CELL - 1, py + CELL - 1], fill=1)
             else:
-                # Body segment: 3×3 centred in cell
+                # Body segment: 3×3 top-left aligned in cell (1px gap on right/bottom)
                 oled.draw.rectangle([px, py, px + CELL - 2, py + CELL - 2], fill=1)
 
         # Draw food — blink every 4 frames; 2×2 centred in cell

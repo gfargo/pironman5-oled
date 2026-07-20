@@ -1,8 +1,11 @@
 """Tests for snake_ai.py — pure-algorithm logic only (no display required)."""
 import sys
+import os
 from collections import deque
 
-sys.path.insert(0, sys.path[0].replace('/tests', '/pages/screensavers'))
+# Resolve the screensavers directory relative to this file so tests can be
+# invoked from any working directory (pytest repo-root, tox, IDE, etc.)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'pages', 'screensavers'))
 from snake_ai import SnakeAI, _bfs_path, _greedy_step, GRID_W, GRID_H
 
 
@@ -223,6 +226,14 @@ def test_draw_renders_within_bounds():
             assert 0 <= y1 <= 63, f"frame {frame}: y1={y1} out of bounds"
             assert 0 <= x2 <= 127, f"frame {frame}: x2={x2} out of bounds"
             assert 0 <= y2 <= 63, f"frame {frame}: y2={y2} out of bounds"
+
+
+def test_rounds_accumulates_across_resets():
+    """rounds counter must accumulate across reset() calls, not reset to zero."""
+    snake = SnakeAI()
+    snake.rounds = 3
+    snake.reset()
+    assert snake.rounds == 3, f"Expected rounds=3 after reset(), got {snake.rounds}"
 
 
 def test_reset_method_exists():
