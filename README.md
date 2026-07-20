@@ -18,7 +18,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 ```
 
 Features:
-- **15 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, sprint progress, portfolio, weather, and more)
+- **16 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, cron job status, sprint progress, portfolio, weather, and more)
 - **18 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, Lorenz attractor, raindrop ripples, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
@@ -36,6 +36,7 @@ Features:
 | Network | Tailscale peers + connectivity |
 | NVMe Health | Wear level, temp, power hours |
 | Backup Status | Latest backup age + size + health |
+| Cron Status | Last 3-4 cron job results, pass/fail + timestamps |
 | Sprint Board | Current Plane cycle progress |
 | Portfolio Ticker | Ghostfolio portfolio value |
 | Budget Burn | Actual Budget monthly spend rate |
@@ -114,7 +115,7 @@ timing:
 The orchestrator reads this file on startup. Unrecognized page names are logged as a
 warning and skipped — they never crash the display. If the file is missing, unreadable,
 or PyYAML isn't installed, the orchestrator falls back to its built-in defaults (the
-15 pages listed above, in the same order, with the timing shown above).
+16 pages listed above, in the same order, with the timing shown above).
 
 `deploy.sh` installs PyYAML into the pironman5 venv and seeds `oled-config.yaml` from
 the example on first deploy (it won't overwrite one you've already customized).
@@ -201,6 +202,8 @@ pironman5-oled/
     ├── network_status.py  # Info: Tailscale peers
     ├── nvme_health.py     # Info: NVMe wear + temp
     ├── backup_status.py   # Info: latest backup health
+    ├── cron_status.py     # Info: last cron job results (pass/fail)
+    ├── cron_log.py        # Pure: journalctl CRON log parsing
     ├── sprint_board.py    # Info: Plane cycle progress (needs token)
     ├── portfolio_ticker.py # Info: Ghostfolio value (needs token)
     ├── budget_burn.py     # Info: Actual Budget burn rate (needs token)

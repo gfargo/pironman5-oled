@@ -22,6 +22,7 @@ from .docker_health import PageDockerHealth
 from .network_status import PageNetwork
 from .nvme_health import PageNVMeHealth
 from .backup_status import PageBackupStatus
+from .cron_status import PageCronStatus
 from .cpu_memory import PageCpuMemory
 from .temperature import PageTemperature
 from .plane_stats import PagePlaneStats
@@ -61,6 +62,7 @@ INFO_PAGE_REGISTRY = {
     'network': PageNetwork,
     'nvme_health': PageNVMeHealth,
     'backup_status': PageBackupStatus,
+    'cron_status': PageCronStatus,
     'sprint_board': PageSprintBoard,
     'portfolio_ticker': PagePortfolioTicker,
     'budget_burn': PageBudgetBurn,

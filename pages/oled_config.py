@@ -19,6 +19,7 @@ DEFAULT_CONFIG = {
         'network',
         'nvme_health',
         'backup_status',
+        'cron_status',
         'sprint_board',
         'portfolio_ticker',
         'budget_burn',
