@@ -40,8 +40,9 @@ class PageNVMeHealth(OLEDPage):
                         temp = int(f.read()) // 1000
                     self._cache = {'temp': temp, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
             except Exception:
-                if not self._cache:
-                    self._cache = {'temp': 0, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
+                pass
+            if not self._cache:
+                self._cache = {'temp': 0, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
         return self._cache
 
     def main(self, oled, data, config):
