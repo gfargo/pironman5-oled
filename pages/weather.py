@@ -3,9 +3,9 @@ import json
 import urllib.request
 import time
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 # wttr.in JSON format — returns current weather for auto-detected location
 WEATHER_URL = "https://wttr.in/?format=j1"

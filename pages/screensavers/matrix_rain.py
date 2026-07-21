@@ -1,9 +1,9 @@
 """Screensaver: Matrix Rain — falling characters."""
 import time
 import random
-from pm_auto.libs.utils import get_font
+from ..pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 SCREEN_W = 128
 SCREEN_H = 64
 

@@ -15,10 +15,11 @@ Layout (128×64):
 from itertools import islice
 import time
 
-from pm_auto.libs.utils import get_icon, get_font
+from pm_auto.libs.utils import get_icon
+from .pixel_font import get_pixel_font
 from pm_auto.libs.oled_page import OLEDPage
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 ethernet_icon = get_icon('icon_lan_20.png')
 wifi_icon = get_icon('icon_wifi_20.png')

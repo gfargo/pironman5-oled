@@ -1,9 +1,10 @@
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_icon, get_font
+from pm_auto.libs.utils import get_icon
+from .pixel_font import get_pixel_font
 
 charging_icon = get_icon('icon_charge_20.png')
 battery_icon = get_icon('icon_battery_40.png')
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 class PageBattery(OLEDPage):
     def __init__(self):

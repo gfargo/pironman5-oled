@@ -119,6 +119,15 @@ or PyYAML isn't installed, the orchestrator falls back to its built-in defaults 
 `deploy.sh` installs PyYAML into the pironman5 venv and seeds `oled-config.yaml` from
 the example on first deploy (it won't overwrite one you've already customized).
 
+### Bundled font
+
+All pages render text with [VT323](https://fonts.google.com/specimen/VT323) (SIL Open
+Font License), bundled under `pages/fonts/`. This keeps OLED text pixel-consistent
+regardless of what system fonts a given Pi OS image ships. `pages/pixel_font.py`
+resolves the bundled font's path at runtime and falls back to pm_auto's system
+`UbuntuSans-Regular.ttf` lookup if the bundled file is ever missing. `deploy.sh`
+copies `pages/fonts/` alongside the pages themselves.
+
 ## How it works
 
 ### The Orchestrator Pattern
@@ -190,6 +199,8 @@ pironman5-oled/
 └── pages/
     ├── __init__.py        # Page registry
     ├── orchestrator.py    # The main orchestrator (state machine)
+    ├── pixel_font.py      # Bundled-font resolver (see Configuration)
+    ├── fonts/             # Bundled VT323 TTF + license
     ├── alert_page.py      # Alert display
     ├── button_handler.py  # Button event handling
     ├── health_monitor.py  # Cron: writes /tmp/oled_alert on unhealthy state

@@ -35,8 +35,8 @@ class UptimeCounter:
             time_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
         # Draw "UPTIME" label small at top
-        from pm_auto.libs.utils import get_font
-        font = get_font('UbuntuSans-Regular.ttf')
+        from ..pixel_font import get_pixel_font
+        font = get_pixel_font()
         oled.draw_text("UPTIME", 40, 5, size=10, font_path=font)
 
         # Draw the time large and centered

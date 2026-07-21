@@ -16,9 +16,9 @@ import os
 import time
 import math
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 ALERT_FILE = '/tmp/oled_alert'
 SCREEN_W = 128

@@ -2,7 +2,8 @@ from itertools import islice
 import time
 
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_icon, format_bytes, get_font
+from pm_auto.libs.utils import get_icon, format_bytes
+from .pixel_font import get_pixel_font
 
 sdcard_icon = get_icon('icon_sd_card_20.png')
 nvme_icon = get_icon('icon_hard_drive_20.png')
@@ -11,7 +12,7 @@ hard_disk_icon = get_icon('icon_hard_drive_20.png')
 raid_icon = get_icon('icon_raid_20.png')
 error_icon = get_icon('icon_error_20.png')
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 class PageDisks(OLEDPage):
     def __init__(self):

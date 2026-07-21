@@ -2,9 +2,9 @@
 import subprocess
 import time
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 
 class PageTemperature(OLEDPage):

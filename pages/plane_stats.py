@@ -2,9 +2,9 @@
 import json
 import urllib.request
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 # Plane API on localhost (same host as Plane)
 PLANE_API = "http://localhost:8080/api/v1"

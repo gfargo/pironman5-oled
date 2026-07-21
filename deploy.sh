@@ -58,6 +58,11 @@ cp "$SCRIPT_DIR/pages/"*.py "$ACTUAL_PAGES/"
 mkdir -p "$ACTUAL_PAGES/screensavers"
 cp "$SCRIPT_DIR/pages/screensavers/"*.py "$ACTUAL_PAGES/screensavers/"
 
+# Step 2b: Copy the bundled pixel font
+echo "[deploy] Installing bundled font..."
+mkdir -p "$ACTUAL_PAGES/fonts"
+cp "$SCRIPT_DIR/pages/fonts/"* "$ACTUAL_PAGES/fonts/"
+
 # Step 3: Copy the pages __init__.py (registry)
 cp "$SCRIPT_DIR/pages/__init__.py" "$ACTUAL_PAGES/__init__.py"
 

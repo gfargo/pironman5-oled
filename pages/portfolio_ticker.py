@@ -4,9 +4,9 @@ import urllib.request
 import time
 import os
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 # Ghostfolio runs on compass:3334 (internal), HTTPS on :3333 (external)
 GHOSTFOLIO_URL = os.environ.get('GHOSTFOLIO_URL', 'http://localhost:3334')
