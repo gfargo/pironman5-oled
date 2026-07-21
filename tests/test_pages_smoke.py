@@ -34,6 +34,12 @@ def test_page_renders(cls):
     for _ in range(DRAW_ITERATIONS):
         page.main(oled, {}, {})
 
+    # A page that clears the screen must also display the result — a page
+    # that legitimately has nothing to show (e.g. PageAlert with no active
+    # alert, see AGENTS graceful-degradation notes) is fine as long as it
+    # never clears either.
+    assert oled.displayed or not oled.cleared
+
 
 def test_all_pages_registered():
     assert len(PAGE_CLASSES) > 0
