@@ -32,3 +32,20 @@ def test_pil_can_load_bundled_font():
         return
     font = ImageFont.truetype(get_pixel_font(), 12)
     assert font.getbbox("Hello") is not None
+
+
+def test_legible_at_oled_page_sizes():
+    """OLED pages render this font at 8-10px; glyphs must not collapse to nothing."""
+    try:
+        from PIL import ImageFont
+    except ImportError:
+        return
+    for size in (8, 9, 10):
+        font = ImageFont.truetype(get_pixel_font(), size)
+        for sample in ("CPU 42C", "Ohm 0123", "99.9%"):
+            bbox = font.getbbox(sample)
+            assert bbox is not None
+            height = bbox[3] - bbox[1]
+            width = bbox[2] - bbox[0]
+            assert height >= 4, f"size={size} {sample!r} rendered too short: {bbox}"
+            assert width >= len(sample), f"size={size} {sample!r} rendered too narrow: {bbox}"
