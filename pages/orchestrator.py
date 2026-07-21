@@ -13,6 +13,7 @@ Features:
 import time
 import os
 import random
+import logging
 from pm_auto.libs.oled_page import OLEDPage
 
 # Import info pages
@@ -37,39 +38,58 @@ from .alert_page import PageAlert
 # Import screensavers
 from .screensavers import ALL_SCREENSAVERS
 
-# Timing
-INFO_DURATION = 12       # seconds per info page
-SCREENSAVER_DURATION = 45  # seconds per screensaver
-ALERT_DURATION = 5       # seconds per alert display cycle
+# Config
+from .oled_config import DEFAULT_CONFIG, load_config, resolve_config
+
+log = logging.getLogger(__name__)
+
+CONFIG_PATH = '/opt/pironman5/oled-config.yaml'
+
+# Timing defaults — overridden per-instance by oled-config.yaml, see resolve_config()
+INFO_DURATION = DEFAULT_CONFIG['timing']['info_duration']
+SCREENSAVER_DURATION = DEFAULT_CONFIG['timing']['screensaver_duration']
+ALERT_DURATION = DEFAULT_CONFIG['timing']['alert_duration']
 PAUSE_FLAG = '/tmp/oled_paused'
 SKIP_FLAG = '/tmp/oled_skip'
 ALERT_FILE = '/tmp/oled_alert'
+
+# Name -> class registry, used to build self.info_pages from the resolved config
+INFO_PAGE_REGISTRY = {
+    'clock': PageClock,
+    'cpu_memory': PageCpuMemory,
+    'docker_health': PageDockerHealth,
+    'temperature': PageTemperature,
+    'network': PageNetwork,
+    'tailscale_peers': PageTailscalePeers,
+    'nvme_health': PageNVMeHealth,
+    'backup_status': PageBackupStatus,
+    'sprint_board': PageSprintBoard,
+    'portfolio_ticker': PagePortfolioTicker,
+    'budget_burn': PageBudgetBurn,
+    'plane_stats': PagePlaneStats,
+    'weather': PageWeather,
+    'octoprint_status': PageOctoprintStatus,
+    'github_activity': PageGithubActivity,
+    'mix': PageMix,
+}
 
 
 class PageOrchestrator(OLEDPage):
     def __init__(self):
         super().__init__()
 
-        # Info pages in fixed display order
-        self.info_pages = [
-            PageClock(),
-            PageCpuMemory(),
-            PageDockerHealth(),
-            PageTemperature(),
-            PageNetwork(),
-            PageTailscalePeers(),
-            PageNVMeHealth(),
-            PageBackupStatus(),
-            PageSprintBoard(),
-            PagePortfolioTicker(),
-            PageBudgetBurn(),
-            PagePlaneStats(),
-            PageWeather(),
-            PageOctoprintStatus(),
-            PageGithubActivity(),
-            PageMix(),
-        ]
+        # Load + resolve oled-config.yaml (falls back to defaults on any failure)
+        raw_config = load_config(CONFIG_PATH)
+        resolved = resolve_config(raw_config, list(INFO_PAGE_REGISTRY.keys()))
+
+        # Info pages, enabled/ordered per the resolved config
+        self.info_pages = [INFO_PAGE_REGISTRY[name]() for name in resolved['pages']]
         self.info_index = 0
+
+        # Timing, per the resolved config
+        self.info_duration = resolved['timing']['info_duration']
+        self.screensaver_duration = resolved['timing']['screensaver_duration']
+        self.alert_duration = resolved['timing']['alert_duration']
 
         # Screensaver pool
         self.screensavers = [cls() for cls in ALL_SCREENSAVERS]
@@ -143,7 +163,7 @@ class PageOrchestrator(OLEDPage):
 
         # ── Info mode ──────────────────────────────────────────
         if self.mode == 'info':
-            if not paused and elapsed >= INFO_DURATION:
+            if not paused and elapsed >= self.info_duration:
                 self._switch_to_screensaver()
                 return
             page = self.info_pages[self.info_index]
@@ -162,7 +182,7 @@ class PageOrchestrator(OLEDPage):
 
         # ── Screensaver mode ───────────────────────────────────
         elif self.mode == 'screensaver':
-            if not paused and elapsed >= SCREENSAVER_DURATION:
+            if not paused and elapsed >= self.screensaver_duration:
                 self._switch_to_info()
                 return
             if self.current_screensaver:

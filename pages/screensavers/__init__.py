@@ -1,4 +1,5 @@
 """Screensaver registry — each animation is a standalone class with reset() and draw(oled)."""
+from .boids import Boids
 from .dvd_bounce import DVDBounce
 from .starfield import Starfield
 from .matrix_rain import MatrixRain
@@ -13,8 +14,15 @@ from .ocean_waves import OceanWaves
 from .lissajous import Lissajous
 from .perlin_terrain import PerlinTerrain
 from .spirograph import Spirograph
+from .lorenz_attractor import LorenzAttractor
+from .raindrop_ripples import RaindropRipples
+from .fire_effect import FireEffect
+from .maze import Maze
+from .morphing_clock import MorphingClock
+from .snake_ai import SnakeAI
 
 ALL_SCREENSAVERS = [
+    Boids,
     DVDBounce,
     Starfield,
     MatrixRain,
@@ -29,4 +37,10 @@ ALL_SCREENSAVERS = [
     Lissajous,
     PerlinTerrain,
     Spirograph,
+    LorenzAttractor,
+    RaindropRipples,
+    FireEffect,
+    Maze,
+    MorphingClock,
+    SnakeAI,
 ]

@@ -19,7 +19,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 
 Features:
 - **16 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, sprint progress, portfolio, weather, and more)
-- **14 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, and more)
+- **18 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, Lorenz attractor, raindrop ripples, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
 - **Service integrations** — reads from Plane, Ghostfolio, Actual Budget, OctoPrint, GitHub (via API tokens)
@@ -48,7 +48,7 @@ Features:
 
 ## Screensavers
 
-Matrix Rain · Game of Life · Starfield · Spirograph · Ocean Waves · Perlin Terrain · Particles · Pendulum Wave · Fractal Tree · Lissajous · DVD Bounce · Binary Clock · Sine Wave · Uptime Counter
+Matrix Rain · Game of Life · Starfield · Spirograph · Ocean Waves · Perlin Terrain · Particles · Pendulum Wave · Fractal Tree · Lissajous · Lorenz Attractor · DVD Bounce · Binary Clock · Sine Wave · Uptime Counter · Raindrop Ripples · Fire Effect · Maze
 
 ## Installation
 
@@ -95,16 +95,30 @@ OCTOPRINT_API_KEY=your-octoprint-api-key
 
 Pages degrade gracefully without tokens — they show "not configured" instead of crashing.
 
-### Timing
+### Page enable/disable, ordering, and timing
 
-Edit the constants in `pages/orchestrator.py`:
-- `INFO_DURATION = 12` — seconds per info page
-- `SCREENSAVER_DURATION = 45` — seconds per screensaver
-- `ALERT_DURATION = 5` — alert display cycle
+Copy [`oled-config.example.yaml`](./oled-config.example.yaml) to `/opt/pironman5/oled-config.yaml`
+and edit it — no Python required:
 
-### Disabling pages
+```yaml
+pages:
+  - clock
+  - cpu_memory
+  - mix          # omit any page name to disable it; order here is display order
 
-Remove unwanted page imports from the `self.info_pages` list in `pages/orchestrator.py`.
+timing:
+  info_duration: 12        # seconds per info page
+  screensaver_duration: 45  # seconds per screensaver
+  alert_duration: 5         # alert display cycle
+```
+
+The orchestrator reads this file on startup. Unrecognized page names are logged as a
+warning and skipped — they never crash the display. If the file is missing, unreadable,
+or PyYAML isn't installed, the orchestrator falls back to its built-in defaults (the
+16 pages listed above, in the same order, with the timing shown above).
+
+`deploy.sh` installs PyYAML into the pironman5 venv and seeds `oled-config.yaml` from
+the example on first deploy (it won't overwrite one you've already customized).
 
 ## How it works
 
@@ -215,7 +229,8 @@ pironman5-oled/
         ├── dvd_bounce.py
         ├── binary_clock.py
         ├── sine_wave.py
-        └── uptime_counter.py
+        ├── uptime_counter.py
+        └── fire_effect.py
 ```
 
 ## Hardware
