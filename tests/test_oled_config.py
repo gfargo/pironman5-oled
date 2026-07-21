@@ -87,3 +87,15 @@ def test_consume_flag_returns_true_and_removes_existing_file(tmp_path):
 def test_consume_flag_returns_false_when_file_absent(tmp_path):
     flag = tmp_path / 'oled_reload'
     assert consume_flag(str(flag)) is False
+
+
+def test_consume_flag_returns_false_when_remove_fails(tmp_path, monkeypatch):
+    flag = tmp_path / 'oled_reload'
+    flag.write_text('')
+
+    def raise_oserror(path):
+        raise OSError("permission denied")
+
+    monkeypatch.setattr('oled_config.os.remove', raise_oserror)
+    assert consume_flag(str(flag)) is False
+    assert flag.exists()
