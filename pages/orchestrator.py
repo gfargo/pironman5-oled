@@ -20,6 +20,7 @@ from pm_auto.libs.oled_page import OLEDPage
 from .mix import PageMix
 from .docker_health import PageDockerHealth
 from .network_status import PageNetwork
+from .tailscale_peers import PageTailscalePeers
 from .nvme_health import PageNVMeHealth
 from .backup_status import PageBackupStatus
 from .cpu_memory import PageCpuMemory
@@ -59,6 +60,7 @@ INFO_PAGE_REGISTRY = {
     'docker_health': PageDockerHealth,
     'temperature': PageTemperature,
     'network': PageNetwork,
+    'tailscale_peers': PageTailscalePeers,
     'nvme_health': PageNVMeHealth,
     'backup_status': PageBackupStatus,
     'sprint_board': PageSprintBoard,

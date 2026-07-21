@@ -17,6 +17,7 @@ DEFAULT_CONFIG = {
         'docker_health',
         'temperature',
         'network',
+        'tailscale_peers',
         'nvme_health',
         'backup_status',
         'sprint_board',

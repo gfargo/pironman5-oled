@@ -10,14 +10,15 @@
 
 # Info pages to show, in display order. Omit a page to disable it.
 # Valid names: clock, cpu_memory, docker_health, temperature, network,
-# nvme_health, backup_status, sprint_board, portfolio_ticker, budget_burn,
-# plane_stats, weather, octoprint_status, github_activity, mix
+# tailscale_peers, nvme_health, backup_status, sprint_board, portfolio_ticker,
+# budget_burn, plane_stats, weather, octoprint_status, github_activity, mix
 pages:
   - clock
   - cpu_memory
   - docker_health
   - temperature
   - network
+  - tailscale_peers
   - nvme_health
   - backup_status
   - sprint_board

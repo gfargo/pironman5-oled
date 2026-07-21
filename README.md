@@ -18,7 +18,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 ```
 
 Features:
-- **15 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, sprint progress, portfolio, weather, and more)
+- **16 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, sprint progress, portfolio, weather, and more)
 - **18 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, Lorenz attractor, raindrop ripples, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
@@ -34,6 +34,7 @@ Features:
 | Docker Health | Container count + status summary |
 | Temperature | CPU + NVMe temps with trend |
 | Network | Tailscale peers + connectivity |
+| Tailscale Peers | Per-peer name, online status, ping latency |
 | NVMe Health | Wear level, temp, power hours |
 | Backup Status | Latest backup age + size + health |
 | Sprint Board | Current Plane cycle progress |
@@ -114,7 +115,7 @@ timing:
 The orchestrator reads this file on startup. Unrecognized page names are logged as a
 warning and skipped — they never crash the display. If the file is missing, unreadable,
 or PyYAML isn't installed, the orchestrator falls back to its built-in defaults (the
-15 pages listed above, in the same order, with the timing shown above).
+16 pages listed above, in the same order, with the timing shown above).
 
 `deploy.sh` installs PyYAML into the pironman5 venv and seeds `oled-config.yaml` from
 the example on first deploy (it won't overwrite one you've already customized).
@@ -199,6 +200,7 @@ pironman5-oled/
     ├── docker_health.py   # Info: container count + status
     ├── temperature.py     # Info: CPU + NVMe temps
     ├── network_status.py  # Info: Tailscale peers
+    ├── tailscale_peers.py # Info: per-peer name + online status + latency
     ├── nvme_health.py     # Info: NVMe wear + temp
     ├── backup_status.py   # Info: latest backup health
     ├── sprint_board.py    # Info: Plane cycle progress (needs token)
