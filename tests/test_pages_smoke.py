@@ -3,17 +3,21 @@ raising, using a MockOLED (no real display/hardware/network needed).
 
 Catches import errors, missing deps, and typos in page code before deploying.
 """
+import importlib
 import urllib.error
 
 import pytest
 
 from mock_oled import MockOLED
 from pages.alert_page import PageAlert
-from pages.orchestrator import INFO_PAGE_REGISTRY
+from pages.orchestrator import INFO_PAGE_MODULES
 
 DRAW_ITERATIONS = 5
 
-PAGE_CLASSES = list(INFO_PAGE_REGISTRY.values()) + [PageAlert]
+PAGE_CLASSES = [
+    getattr(importlib.import_module(modname, package="pages"), clsname)
+    for modname, clsname in INFO_PAGE_MODULES.values()
+] + [PageAlert]
 
 
 @pytest.fixture(autouse=True)
