@@ -1,8 +1,8 @@
 """Screensaver: Bouncing DVD Logo."""
 import time
-from pm_auto.libs.utils import get_font
+from ..pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 LOGO_W = 26
 LOGO_H = 12

@@ -42,8 +42,8 @@ class BinaryClock:
         # Max bits needed: [2, 4, 3, 4, 3, 4] (tens digit of hours max 2, etc.)
         max_bits = [2, 4, 3, 4, 3, 4]
 
-        from pm_auto.libs.utils import get_font
-        font = get_font('UbuntuSans-Regular.ttf')
+        from ..pixel_font import get_pixel_font
+        font = get_pixel_font()
 
         # Labels
         labels = ["H", "", "M", "", "S", ""]

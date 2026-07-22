@@ -1,7 +1,8 @@
-from pm_auto.libs.utils import get_icon, get_font
+from pm_auto.libs.utils import get_icon
+from .pixel_font import get_pixel_font
 from pm_auto.libs.oled_page import OLEDPage
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 output_icon = get_icon('raspberry_icon_48.png')
 sunfounder_icon = get_icon('sunfounder.ico')

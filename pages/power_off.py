@@ -1,7 +1,7 @@
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 from pm_auto.libs.oled_page import OLEDPage
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 class PagePowerOff(OLEDPage):
     def main(self, oled):
