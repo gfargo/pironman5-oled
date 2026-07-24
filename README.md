@@ -70,6 +70,10 @@ That's it. The OLED will start showing the orchestrator flow within seconds.
 cd ~/pironman5-oled && git pull && sudo bash deploy.sh
 ```
 
+For quick iteration on a single page during development, you can skip the restart entirely —
+copy your edit into the deployed venv and `touch /tmp/oled_reload` instead. See
+[Hot-reloading pages during development](#hot-reloading-pages-during-development) below.
+
 ## Configuration
 
 ### Secrets (for authenticated pages)
@@ -165,6 +169,14 @@ The pironman5 config:
 
 - **Short press** — skip to next (creates `/tmp/oled_skip` file flag)
 - **Pause** — creates `/tmp/oled_paused` file flag (small dot indicator in corner)
+
+### Hot-reloading pages during development
+
+`touch /tmp/oled_reload` — the orchestrator notices the flag on its next tick, deletes it,
+re-imports every page/screensaver module, and re-reads `oled-config.yaml`. Source edits and
+config changes go live within a second, no service restart required. If the reload itself
+fails (e.g. a syntax error in the edited page), the orchestrator logs it and keeps rendering
+the previously-loaded pages rather than crashing.
 
 ### Alert Mode
 
