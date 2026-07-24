@@ -41,7 +41,7 @@ class PageCronStatus(OLEDPage):
         oled.draw_bar_graph_horizontal(100, 0, 12, 128, 1)
         if entries:
             passed = sum(1 for e in entries if e['ok'])
-            oled.draw_text(f"{passed}/{len(entries)}", 104, 0, size=10, font_path=font)
+            oled.draw_text(f"{passed}/{len(entries)}", 108, 0, size=10, font_path=font)
 
         if not entries:
             oled.draw_text("No cron runs", 8, 26, size=11, font_path=font)

@@ -36,6 +36,9 @@ def _job_name(command):
         if part in _SHELL_METACHARS or part.startswith('>') or part.startswith('2>'):
             parts = parts[:i]
             break
+        if part.endswith(';'):
+            parts = parts[:i] + [part[:-1]]
+            break
     for part in reversed(parts):
         if part.endswith('.py') or '/' in part:
             return part.rsplit('/', 1)[-1].removesuffix('.py')

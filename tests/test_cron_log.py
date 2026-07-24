@@ -98,3 +98,9 @@ def test_command_with_output_redirection_uses_script_basename():
     )
     entries = parse_cron_log(text)
     assert entries[0]['command'] == 'backup.sh'
+
+
+def test_command_with_trailing_semicolon_strips_it():
+    text = "Jul 20 09:00:01 pi5 CRON[1]: (pi) CMD (/opt/backup.sh;)"
+    entries = parse_cron_log(text)
+    assert entries[0]['command'] == 'backup.sh'
