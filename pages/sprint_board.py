@@ -5,9 +5,9 @@ import time
 import os
 from datetime import datetime
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 # Plane API (internal, on same host)
 PLANE_API_URL = os.environ.get('PLANE_API_URL', 'http://localhost:8080')

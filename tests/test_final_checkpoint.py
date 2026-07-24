@@ -186,13 +186,13 @@ def test_wind_phase_advances_every_draw():
 
 def test_no_unused_imports():
     """Check that the module doesn't import unused modules like `time`."""
-    import importlib.util
-    spec = importlib.util.spec_from_file_location(
-        "fractal_tree",
-        "/Users/gfargo/Documents/Claude/Projects/Life Automation/pironman5-oled/pages/screensavers/fractal_tree.py"
+    import os
+    fractal_tree_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "pages", "screensavers", "fractal_tree.py"
     )
     # Read the source and check imports
-    with open(spec.origin, 'r') as f:
+    with open(fractal_tree_path, 'r') as f:
         source = f.read()
 
     # These modules should NOT be imported (legacy leftovers)

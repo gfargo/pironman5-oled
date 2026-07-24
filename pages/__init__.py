@@ -36,6 +36,9 @@ def get_pages(page_names):
         elif "network" == name:
             from .network_status import PageNetwork
             pages.append(PageNetwork())
+        elif "tailscale" == name:
+            from .tailscale_peers import PageTailscalePeers
+            pages.append(PageTailscalePeers())
         elif "backup" == name:
             from .backup_status import PageBackupStatus
             pages.append(PageBackupStatus())

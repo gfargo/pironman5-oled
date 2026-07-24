@@ -18,7 +18,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 ```
 
 Features:
-- **16 info pages** rotating sequentially (system vitals, Docker health, network, NVMe, backups, cron job status, sprint progress, portfolio, weather, and more)
+- **17 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, cron job status, sprint progress, portfolio, weather, and more)
 - **18 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, Lorenz attractor, raindrop ripples, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
@@ -34,6 +34,7 @@ Features:
 | Docker Health | Container count + status summary |
 | Temperature | CPU + NVMe temps with trend |
 | Network | Tailscale peers + connectivity |
+| Tailscale Peers | Per-peer name, online status, ping latency |
 | NVMe Health | Wear level, temp, power hours |
 | Backup Status | Latest backup age + size + health |
 | Cron Status | Last 3-4 cron job results, pass/fail + timestamps |
@@ -69,6 +70,10 @@ That's it. The OLED will start showing the orchestrator flow within seconds.
 ```bash
 cd ~/pironman5-oled && git pull && sudo bash deploy.sh
 ```
+
+For quick iteration on a single page during development, you can skip the restart entirely —
+copy your edit into the deployed venv and `touch /tmp/oled_reload` instead. See
+[Hot-reloading pages during development](#hot-reloading-pages-during-development) below.
 
 ## Configuration
 
@@ -120,6 +125,15 @@ or PyYAML isn't installed, the orchestrator falls back to its built-in defaults 
 `deploy.sh` installs PyYAML into the pironman5 venv and seeds `oled-config.yaml` from
 the example on first deploy (it won't overwrite one you've already customized).
 
+### Bundled font
+
+All pages render text with [VT323](https://fonts.google.com/specimen/VT323) (SIL Open
+Font License), bundled under `pages/fonts/`. This keeps OLED text pixel-consistent
+regardless of what system fonts a given Pi OS image ships. `pages/pixel_font.py`
+resolves the bundled font's path at runtime and falls back to pm_auto's system
+`UbuntuSans-Regular.ttf` lookup if the bundled file is ever missing. `deploy.sh`
+copies `pages/fonts/` alongside the pages themselves.
+
 ## How it works
 
 ### The Orchestrator Pattern
@@ -157,6 +171,14 @@ The pironman5 config:
 - **Short press** — skip to next (creates `/tmp/oled_skip` file flag)
 - **Pause** — creates `/tmp/oled_paused` file flag (small dot indicator in corner)
 
+### Hot-reloading pages during development
+
+`touch /tmp/oled_reload` — the orchestrator notices the flag on its next tick, deletes it,
+re-imports every page/screensaver module, and re-reads `oled-config.yaml`. Source edits and
+config changes go live within a second, no service restart required. If the reload itself
+fails (e.g. a syntax error in the edited page), the orchestrator logs it and keeps rendering
+the previously-loaded pages rather than crashing.
+
 ### Alert Mode
 
 The health monitor (`health_monitor.py`) runs via cron every 5 minutes. When it detects an unhealthy condition (high temp, disk full, containers down), it writes `/tmp/oled_alert`. The orchestrator immediately switches to the alert page until the condition resolves.
@@ -191,6 +213,8 @@ pironman5-oled/
 └── pages/
     ├── __init__.py        # Page registry
     ├── orchestrator.py    # The main orchestrator (state machine)
+    ├── pixel_font.py      # Bundled-font resolver (see Configuration)
+    ├── fonts/             # Bundled VT323 TTF + license
     ├── alert_page.py      # Alert display
     ├── button_handler.py  # Button event handling
     ├── health_monitor.py  # Cron: writes /tmp/oled_alert on unhealthy state
@@ -200,6 +224,7 @@ pironman5-oled/
     ├── docker_health.py   # Info: container count + status
     ├── temperature.py     # Info: CPU + NVMe temps
     ├── network_status.py  # Info: Tailscale peers
+    ├── tailscale_peers.py # Info: per-peer name + online status + latency
     ├── nvme_health.py     # Info: NVMe wear + temp
     ├── backup_status.py   # Info: latest backup health
     ├── cron_status.py     # Info: last cron job results (pass/fail)

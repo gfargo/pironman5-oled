@@ -7,7 +7,7 @@ disk/yaml and needs the real orchestrator environment.
 import sys
 
 sys.path.insert(0, sys.path[0].replace('/tests', '/pages'))
-from oled_config import DEFAULT_CONFIG, resolve_config
+from oled_config import DEFAULT_CONFIG, resolve_config, consume_flag
 
 VALID_PAGES = ['clock', 'cpu_memory', 'mix', 'weather']
 
@@ -75,3 +75,27 @@ def test_string_timing_value_coerced_to_int():
     resolved = resolve_config({'timing': {'info_duration': '20'}}, VALID_PAGES)
     assert resolved['timing']['info_duration'] == 20
     assert isinstance(resolved['timing']['info_duration'], int)
+
+
+def test_consume_flag_returns_true_and_removes_existing_file(tmp_path):
+    flag = tmp_path / 'oled_reload'
+    flag.write_text('')
+    assert consume_flag(str(flag)) is True
+    assert not flag.exists()
+
+
+def test_consume_flag_returns_false_when_file_absent(tmp_path):
+    flag = tmp_path / 'oled_reload'
+    assert consume_flag(str(flag)) is False
+
+
+def test_consume_flag_returns_false_when_remove_fails(tmp_path, monkeypatch):
+    flag = tmp_path / 'oled_reload'
+    flag.write_text('')
+
+    def raise_oserror(path):
+        raise OSError("permission denied")
+
+    monkeypatch.setattr('oled_config.os.remove', raise_oserror)
+    assert consume_flag(str(flag)) is False
+    assert flag.exists()

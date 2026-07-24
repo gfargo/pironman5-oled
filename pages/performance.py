@@ -1,7 +1,8 @@
-from pm_auto.libs.utils import get_icon, format_bytes, get_font
+from pm_auto.libs.utils import get_icon, format_bytes
+from .pixel_font import get_pixel_font
 from pm_auto.libs.oled_page import OLEDPage
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 cpu_icon = get_icon('icon_cpu_24.png')
 ram_icon = get_icon('icon_ram_24.png')

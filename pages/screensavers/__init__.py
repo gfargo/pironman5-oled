@@ -19,6 +19,7 @@ from .raindrop_ripples import RaindropRipples
 from .fire_effect import FireEffect
 from .maze import Maze
 from .morphing_clock import MorphingClock
+from .snake_ai import SnakeAI
 
 ALL_SCREENSAVERS = [
     Boids,
@@ -41,4 +42,5 @@ ALL_SCREENSAVERS = [
     FireEffect,
     Maze,
     MorphingClock,
+    SnakeAI,
 ]

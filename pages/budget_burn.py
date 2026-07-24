@@ -5,9 +5,9 @@ import time
 import os
 from datetime import datetime
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 # Actual Budget runs on compass:5016 (internal), HTTPS on :5006 (external)
 ACTUAL_URL = os.environ.get('ACTUAL_URL', 'http://localhost:5016')

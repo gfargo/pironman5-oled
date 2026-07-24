@@ -7,6 +7,7 @@ is the only function that touches disk/yaml, and degrades to `None` on any
 failure — callers fall back to `DEFAULT_CONFIG` in that case.
 """
 import logging
+import os
 
 log = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ DEFAULT_CONFIG = {
         'docker_health',
         'temperature',
         'network',
+        'tailscale_peers',
         'nvme_health',
         'backup_status',
         'cron_status',
@@ -66,6 +68,23 @@ def load_config(path):
         return None
 
     return raw
+
+
+def consume_flag(path):
+    """Return True and delete the file at `path` if it exists, else return False.
+
+    Returns False if the file exists but can't be removed, so a stuck flag
+    (e.g. permissions issue) doesn't re-trigger its action on every call.
+    Never raises — used for the file-flag idiom (oled_paused/oled_skip/oled_reload).
+    """
+    if not os.path.exists(path):
+        return False
+    try:
+        os.remove(path)
+    except OSError as e:
+        log.warning("Could not remove flag file %s: %s", path, e)
+        return False
+    return True
 
 
 def _coerce_int(value, default):

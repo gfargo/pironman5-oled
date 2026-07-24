@@ -2,9 +2,9 @@
 import subprocess
 import re
 from pm_auto.libs.oled_page import OLEDPage
-from pm_auto.libs.utils import get_font
+from .pixel_font import get_pixel_font
 
-font = get_font('UbuntuSans-Regular.ttf')
+font = get_pixel_font()
 
 
 class PageNVMeHealth(OLEDPage):
@@ -40,8 +40,9 @@ class PageNVMeHealth(OLEDPage):
                         temp = int(f.read()) // 1000
                     self._cache = {'temp': temp, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
             except Exception:
-                if not self._cache:
-                    self._cache = {'temp': 0, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
+                pass
+            if not self._cache:
+                self._cache = {'temp': 0, 'wear': 0, 'written': '??', 'hours': 0, 'healthy': True}
         return self._cache
 
     def main(self, oled, data, config):
