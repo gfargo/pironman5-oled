@@ -47,6 +47,7 @@ INFO_PAGE_MODULES = {
     'tailscale_peers': ('.tailscale_peers', 'PageTailscalePeers'),
     'nvme_health': ('.nvme_health', 'PageNVMeHealth'),
     'backup_status': ('.backup_status', 'PageBackupStatus'),
+    'cron_status': ('.cron_status', 'PageCronStatus'),
     'sprint_board': ('.sprint_board', 'PageSprintBoard'),
     'portfolio_ticker': ('.portfolio_ticker', 'PagePortfolioTicker'),
     'budget_burn': ('.budget_burn', 'PageBudgetBurn'),

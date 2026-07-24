@@ -18,7 +18,7 @@ info page (12s) → screensaver (45s) → info page (12s) → screensaver (45s) 
 ```
 
 Features:
-- **16 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, sprint progress, portfolio, weather, and more)
+- **17 info pages** rotating sequentially (system vitals, Docker health, network, Tailscale peers, NVMe, backups, cron job status, sprint progress, portfolio, weather, and more)
 - **18 animated screensavers** randomly selected between info pages (Matrix rain, Game of Life, starfield, spirograph, ocean waves, fire effect, Lorenz attractor, raindrop ripples, and more)
 - **Alert mode** — interrupts rotation when `/tmp/oled_alert` exists (health monitor writes this)
 - **Button controls** — short press = skip to next, pause via file flag
@@ -37,6 +37,7 @@ Features:
 | Tailscale Peers | Per-peer name, online status, ping latency |
 | NVMe Health | Wear level, temp, power hours |
 | Backup Status | Latest backup age + size + health |
+| Cron Status | Last 3-4 cron job results, pass/fail + timestamps |
 | Sprint Board | Current Plane cycle progress |
 | Portfolio Ticker | Ghostfolio portfolio value |
 | Budget Burn | Actual Budget monthly spend rate |
@@ -226,6 +227,8 @@ pironman5-oled/
     ├── tailscale_peers.py # Info: per-peer name + online status + latency
     ├── nvme_health.py     # Info: NVMe wear + temp
     ├── backup_status.py   # Info: latest backup health
+    ├── cron_status.py     # Info: last cron job results (pass/fail)
+    ├── cron_log.py        # Pure: journalctl CRON log parsing
     ├── sprint_board.py    # Info: Plane cycle progress (needs token)
     ├── portfolio_ticker.py # Info: Ghostfolio value (needs token)
     ├── budget_burn.py     # Info: Actual Budget burn rate (needs token)

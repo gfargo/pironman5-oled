@@ -21,6 +21,7 @@ DEFAULT_CONFIG = {
         'tailscale_peers',
         'nvme_health',
         'backup_status',
+        'cron_status',
         'sprint_board',
         'portfolio_ticker',
         'budget_burn',
